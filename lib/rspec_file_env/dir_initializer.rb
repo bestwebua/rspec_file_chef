@@ -1,5 +1,7 @@
 module RspecFileEnv
   module DirInitializer
+    HELPER_PATH = 'support/helpers/file_chef'.freeze
+
     private
 
     def rspec_pattern
@@ -10,7 +12,7 @@ module RspecFileEnv
       path = FileChef.config.rspec_path
       return unless path
       path = path[/#{rspec_pattern}/]
-      raise 'Wrong rspec path.' unless path
+      raise Error::RSPEC_PATH unless path
       @rspec_path = "#{path}/spec"
     end
 
@@ -27,8 +29,7 @@ module RspecFileEnv
     end
 
     def check_config
-      error = 'Config error. You should specify custom tmp_dir and test_dir params.'
-      raise error if custom_paths.any?(&:nil?)
+      raise Error::CONFIG if custom_paths.any?(&:nil?)
     end
 
     def custom_paths_needed?
@@ -38,14 +39,12 @@ module RspecFileEnv
     end
 
     def check_custom_paths
-      error = 'All custom paths should exist.'
-      raise error if custom_paths.any? { |path| !Dir.exist?(path) }
+      raise Error::CUSTOM_PATHS if custom_paths.any? { |path| !Dir.exist?(path) }
     end
 
     def create_helper_dir
-      support_path = "#{rspec_path}/support/helpers/file_chef"
       %w[temp_data test_data].map do |path|
-        path = "#{support_path}/#{path}"
+        path = "#{rspec_path}/HELPER_PATH/#{path}"
         FileUtils.mkdir_p(path)
         path
       end
