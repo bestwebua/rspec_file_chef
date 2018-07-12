@@ -1,5 +1,2 @@
 require 'rspec_file_env/version'
-
-module RspecFileEnv
-  # Your code goes here...
-end
+require 'rspec_file_env/file_chef'
