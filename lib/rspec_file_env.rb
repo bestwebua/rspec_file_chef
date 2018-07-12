@@ -1,5 +1,6 @@
 require 'dry-configurable'
 require_relative 'rspec_file_env/version'
+require_relative 'rspec_file_env/error'
 require_relative 'rspec_file_env/dir_initializer'
 require_relative 'rspec_file_env/state_keeper'
 require_relative 'rspec_file_env/file_chef'
