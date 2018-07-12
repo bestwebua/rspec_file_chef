@@ -1,9 +1,7 @@
-RSpec.describe RspecFileEnv do
-  it 'has a version number' do
-    expect(RspecFileEnv::VERSION).not_to be nil
-  end
+require 'spec_helper'
 
-  it 'does something useful' do
-    expect(false).to eq(true)
+module RspecFileEnv
+  RSpec.describe RspecFileEnv do
+    specify { expect(subject).to be_const_defined(:VERSION) }
   end
 end
