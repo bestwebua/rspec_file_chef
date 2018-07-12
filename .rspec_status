@@ -1,0 +1,4 @@
+example_id                                 | status | run_time        |
+------------------------------------------ | ------ | --------------- |
+./spec/rspec_file_env/version_spec.rb[1:1] | passed | 0.00062 seconds |
+./spec/rspec_file_env_spec.rb[1:1]         | passed | 0.00135 seconds |
