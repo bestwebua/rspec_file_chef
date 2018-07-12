@@ -15,11 +15,11 @@ module RspecFileEnv
     end
 
     def custom_tmp_dir
-      FileChef.config.tmp_dir_path
+      FileChef.config.custom_tmp_dir
     end
 
     def custom_test_dir
-      FileChef.config.test_dir_path
+      FileChef.config.custom_test_dir
     end
 
     def custom_paths
@@ -27,7 +27,7 @@ module RspecFileEnv
     end
 
     def check_config
-      error = 'Config not complete. You should specify both dir settings.'
+      error = 'Config error. You should specify custom tmp_dir and test_dir params.'
       raise error if custom_paths.any?(&:nil?)
     end
 
