@@ -77,7 +77,7 @@ module RspecFileEnv
 
     describe '#make' do
       let(:instance_methods) do
-        %i[create_path_table create_test_files_list move_to_tmp_dir create_nonexistent_dirs copy_from_test_dir]
+        %i[create_path_table move_to_tmp_dir create_nonexistent_dirs copy_from_test_dir]
       end
 
       before do
@@ -89,11 +89,6 @@ module RspecFileEnv
       describe 'method call' do
         context '#create_path_table' do
           let(:method) { :create_path_table }
-          it_behaves_like(:method_call)
-        end
-
-        context '#create_test_files_list' do
-          let(:method) { :create_test_files_list }
           it_behaves_like(:method_call)
         end
 

@@ -17,7 +17,6 @@ module RspecFileEnv
 
     def make
       create_path_table
-      create_test_files_list
       move_to_tmp_dir
       create_nonexistent_dirs
       copy_from_test_dir
