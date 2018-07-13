@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 module RspecFileEnv
   RSpec.describe 'RspecFileEnv version' do
     specify { expect(VERSION).not_to be(nil) }

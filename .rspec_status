@@ -1,7 +1,16 @@
-example_id                                 | status | run_time        |
------------------------------------------- | ------ | --------------- |
-./spec/rspec_file_env/error_spec.rb[1:1]   | passed | 0.00023 seconds |
-./spec/rspec_file_env/error_spec.rb[1:2]   | passed | 0.00019 seconds |
-./spec/rspec_file_env/error_spec.rb[1:3]   | passed | 0.00014 seconds |
-./spec/rspec_file_env/version_spec.rb[1:1] | passed | 0.0006 seconds  |
-./spec/rspec_file_env_spec.rb[1:1]         | passed | 0.00166 seconds |
+example_id                                         | status | run_time        |
+-------------------------------------------------- | ------ | --------------- |
+./spec/rspec_file_env/error_spec.rb[1:1]           | passed | 0.00022 seconds |
+./spec/rspec_file_env/error_spec.rb[1:2]           | passed | 0.00018 seconds |
+./spec/rspec_file_env/error_spec.rb[1:3]           | passed | 0.00014 seconds |
+./spec/rspec_file_env/file_chef_spec.rb[1:1:1:1]   | passed | 0.00627 seconds |
+./spec/rspec_file_env/file_chef_spec.rb[1:1:2:1]   | passed | 0.00032 seconds |
+./spec/rspec_file_env/file_chef_spec.rb[1:1:2:2]   | passed | 0.00058 seconds |
+./spec/rspec_file_env/file_chef_spec.rb[1:1:2:3]   | passed | 0.0003 seconds  |
+./spec/rspec_file_env/file_chef_spec.rb[1:1:2:4]   | passed | 0.00026 seconds |
+./spec/rspec_file_env/file_chef_spec.rb[1:2:1:1:1] | passed | 0.00074 seconds |
+./spec/rspec_file_env/file_chef_spec.rb[1:2:1:2:1] | passed | 0.00055 seconds |
+./spec/rspec_file_env/file_chef_spec.rb[1:2:2:1:1] | passed | 0.00116 seconds |
+./spec/rspec_file_env/file_chef_spec.rb[1:2:2:2:1] | passed | 0.00096 seconds |
+./spec/rspec_file_env/version_spec.rb[1:1]         | passed | 0.00062 seconds |
+./spec/rspec_file_env_spec.rb[1:1]                 | passed | 0.00149 seconds |
