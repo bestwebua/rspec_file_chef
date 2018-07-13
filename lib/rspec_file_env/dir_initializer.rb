@@ -2,6 +2,8 @@ module RspecFileEnv
   module DirInitializer
     HELPER_PATH = 'support/helpers/file_chef'.freeze
 
+    attr_reader :rspec_path
+
     private
 
     def rspec_pattern

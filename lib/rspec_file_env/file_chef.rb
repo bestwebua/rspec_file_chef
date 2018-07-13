@@ -8,8 +8,6 @@ module RspecFileEnv
     setting :custom_tmp_dir
     setting :custom_test_dir
 
-    attr_reader :tmp_dir, :test_dir, :tracking_files, :path_table, :rspec_path
-
     def initialize(*tracking_files)
       set_rspec_path
       set_dir_paths

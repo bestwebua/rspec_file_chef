@@ -1,5 +1,7 @@
 module RspecFileEnv
   module StateKeeper
+    attr_reader :tmp_dir, :test_dir, :tracking_files, :path_table
+
     def test_files
       path_table.map do |file_name, _|
         "#{test_dir}/#{file_name}"
