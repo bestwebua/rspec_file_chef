@@ -11,7 +11,7 @@ module RspecFileEnv
     private
 
     def file_pattern
-      %r{/\A(.+)\/(.+)\z/}
+      %r{\A(.+)\/(.+)\z}
     end
 
     def create_path_table

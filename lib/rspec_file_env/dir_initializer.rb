@@ -7,7 +7,7 @@ module RspecFileEnv
     private
 
     def rspec_pattern
-      %r{/\A.+?(?=\/spec(\/|\z))/}
+      %r{\A.+?(?=\/spec(\/|\z))}
     end
 
     def set_rspec_path
@@ -46,7 +46,7 @@ module RspecFileEnv
 
     def create_helper_dir
       %w[temp_data test_data].map do |path|
-        path = "#{rspec_path}/HELPER_PATH/#{path}"
+        path = "#{rspec_path}/#{HELPER_PATH}/#{path}"
         FileUtils.mkdir_p(path)
         path
       end
