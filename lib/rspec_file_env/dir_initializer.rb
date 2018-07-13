@@ -10,20 +10,23 @@ module RspecFileEnv
       %r{\A.+?(?=\/spec(\/|\z))}
     end
 
-    def set_rspec_path
-      path = FileChef.config.rspec_path
-      return unless path
-      path = path[/#{rspec_pattern}/]
-      raise Error::RSPEC_PATH unless path
-      @rspec_path = "#{path}/spec"
+    def default_rspec_path
+      self.class.config.rspec_path
     end
 
     def custom_tmp_dir
-      FileChef.config.custom_tmp_dir
+      self.class.config.custom_tmp_dir
     end
 
     def custom_test_dir
-      FileChef.config.custom_test_dir
+      self.class.config.custom_test_dir
+    end
+
+    def set_rspec_path
+      return unless default_rspec_path
+      path = default_rspec_path[/#{rspec_pattern}/]
+      raise Error::RSPEC_PATH unless path
+      @rspec_path = "#{path}/spec"
     end
 
     def custom_paths
@@ -32,12 +35,12 @@ module RspecFileEnv
 
     def check_config
       raise Error::CONFIG if custom_paths.any?(&:nil?)
+      true
     end
 
     def custom_paths_needed?
       return false if rspec_path
       check_config
-      true
     end
 
     def check_custom_paths
