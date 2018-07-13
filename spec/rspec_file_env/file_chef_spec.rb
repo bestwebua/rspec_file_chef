@@ -5,6 +5,10 @@ module RspecFileEnv
       allow_any_instance_of(FileChef).to receive(:set_dir_paths).and_return(true)
     end
 
+    shared_examples(:method_call) do
+      specify { expect(subject.send(method)).to be(true) }
+    end
+
     describe '.config accepting' do
       let(:empty_config) do
         FileChef.config.instance_variable_get(:@config).values.all?(&:nil?)
@@ -50,11 +54,13 @@ module RspecFileEnv
     describe '#initialize' do
       describe 'method call' do
         context '#set_rspec_path' do
-          specify { expect(subject.send(:set_rspec_path)).to be(true) }
+          let(:method) { :set_rspec_path }
+          it_behaves_like(:method_call)
         end
 
         context '#set_dir_paths' do
-          specify { expect(subject.send(:set_dir_paths)).to be(true) }
+          let(:method) { :set_dir_paths }
+          it_behaves_like(:method_call)
         end
       end
 
@@ -70,7 +76,71 @@ module RspecFileEnv
     end
 
     describe '#make' do
+      let(:instance_methods) do
+        %i[create_path_table create_test_files_list move_to_tmp_dir create_nonexistent_dirs copy_from_test_dir]
+      end
 
+      before do
+        instance_methods.each do |method|
+          allow_any_instance_of(FileChef).to receive(method).and_return(true)
+        end
+      end
+
+      describe 'method call' do
+        context '#create_path_table' do
+          let(:method) { :create_path_table }
+          it_behaves_like(:method_call)
+        end
+
+        context '#create_test_files_list' do
+          let(:method) { :create_test_files_list }
+          it_behaves_like(:method_call)
+        end
+
+        context '#move_to_tmp_dir' do
+          let(:method) { :move_to_tmp_dir }
+          it_behaves_like(:method_call)
+        end
+
+        context '#create_nonexistent_dirs' do
+          let(:method) { :create_nonexistent_dirs }
+          it_behaves_like(:method_call)
+        end
+
+        context '#copy_from_test_dir' do
+          let(:method) { :copy_from_test_dir }
+          it_behaves_like(:method_call)
+        end
+      end
+    end
+
+    describe '#clear' do
+      let(:instance_methods) do
+        %i[delete_test_files restore_tracking_files delete_nonexistent_dirs]
+      end
+
+      before do
+        instance_methods.each do |method|
+          allow_any_instance_of(FileChef).to receive(method).and_return(true)
+        end
+      end
+
+      describe 'method call' do
+        context '#delete_test_files' do
+          let(:method) { :delete_test_files }
+          it_behaves_like(:method_call)
+        end
+
+        context '#restore_tracking_files' do
+          let(:method) { :restore_tracking_files }
+          it_behaves_like(:method_call)
+        end
+
+        context '#delete_nonexistent_dirs' do
+          let(:method) { :delete_nonexistent_dirs }
+          it_behaves_like(:method_call)
+        end
+      end
     end
   end
 end
