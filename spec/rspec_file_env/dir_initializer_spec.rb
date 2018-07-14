@@ -138,15 +138,38 @@ module RspecFileEnv
       end
     end
 
+    describe '#any_custom_path' do
+      describe 'scenario' do
+        let(:custom_paths_stub) do
+          allow(subject).to receive(:custom_paths).and_return([1, 3])
+        end
+
+        context 'no block passed' do
+          before { custom_paths_stub }
+          specify { expect(subject.send(:any_custom_path)).to be(true) }
+        end
+
+        context 'block passed' do
+          before { custom_paths_stub }
+          specify { expect(subject.send(:any_custom_path, &:nil?)).to be(false) }
+          specify { expect(subject.send(:any_custom_path, &:odd?)).to be(true) }
+        end
+      end
+    end
+
+    describe '#not_exist?' do
+      specify { expect(subject.send(:not_exist?)).to be_an_instance_of(Proc) }
+    end
+
     describe '#check_config' do
       describe 'method call' do
         before do
-          allow(subject).to receive(:custom_paths).and_return([])
+          allow(subject).to receive(:any_custom_path)
           subject.send(:check_config)
         end
 
         after { subject.send(:check_config) }
-        specify { expect(subject).to receive(:custom_paths) }
+        specify { expect(subject).to receive(:any_custom_path) }
       end
 
       describe 'scenario' do
@@ -205,25 +228,43 @@ module RspecFileEnv
     describe '#check_custom_paths' do
       describe 'scenario' do
         context 'non existent paths' do
-          before do
-            allow(subject).to receive(:custom_paths).and_return(['/non_existent_path'])
+          context 'method call' do
+            before do
+              allow(subject).to receive(:any_custom_path)
+              subject.send(:check_custom_paths)
+            end
+
+            after { subject.send(:check_custom_paths) }
+            specify { expect(subject).to receive(:any_custom_path) }
           end
 
-          specify do
-            expect {subject.send(:check_custom_paths)}.to raise_error(RuntimeError, Error::CUSTOM_PATHS)
+          context 'raise error' do
+            before do
+              allow(subject).to receive(:any_custom_path).and_return(true)
+            end
+
+            specify do
+              expect {subject.send(:check_custom_paths)}.to raise_error(RuntimeError, Error::CUSTOM_PATHS)
+            end
           end
         end
 
         context 'existent paths' do
           before do
-            allow(subject).to receive(:custom_paths).and_return([this_path, this_path])
+            allow(subject).to receive(:any_custom_path).and_return(false)
+            allow(subject).to receive(:not_exist?)
             subject.send(:check_custom_paths)
           end
 
           after { subject.send(:check_custom_paths) }
-          specify { expect(subject).to receive(:custom_paths) }
+          specify { expect(subject).to receive(:any_custom_path) }
+          specify { expect(subject).to receive(:not_exist?) }
         end
       end
+    end
+
+    describe '#create_helper_dir' do
+
     end
 
 
