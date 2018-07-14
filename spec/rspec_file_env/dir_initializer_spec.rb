@@ -12,6 +12,7 @@ module RspecFileEnv
     let(:rspec_path)      { this_path }
     let(:custom_tmp_dir)  { "#{this_path}/tmp_dir" }
     let(:custom_test_dir) { "#{this_path}/test_dir" }
+
     let(:apply_config) do
       subject.class.configure do |config|
         config.rspec_path = rspec_path
@@ -19,6 +20,16 @@ module RspecFileEnv
         config.custom_test_dir = custom_test_dir
       end
     end
+
+    let(:clear_config) do
+      subject.class.configure do |config|
+        config.rspec_path = nil
+        config.custom_tmp_dir = nil
+        config.custom_test_dir = nil
+      end
+    end
+
+    after { clear_config }
 
     describe 'Constants' do
       specify { expect(subject).to have_constant(DirInitializer::HELPER_PATH) }
@@ -124,6 +135,37 @@ module RspecFileEnv
 
         specify { expect(subject).to receive(:custom_tmp_dir) }
         specify { expect(subject).to receive(:custom_test_dir) }
+      end
+    end
+
+    describe '#check_config' do
+      describe 'method call' do
+        before do
+          allow(subject).to receive(:custom_paths).and_return([])
+          subject.send(:check_config)
+        end
+
+        after { subject.send(:check_config) }
+        specify { expect(subject).to receive(:custom_paths) }
+      end
+
+      describe 'scenario' do
+        context 'not raise error' do
+          before { apply_config }
+          specify do
+            expect(subject.send(:check_config)).to be(true)
+          end
+        end
+
+        context 'raise error' do
+          before do
+            allow(subject).to receive(:custom_paths).and_return([nil])
+          end
+
+          specify do
+            expect {subject.send(:check_config)}.to raise_error(RuntimeError, Error::CONFIG)
+          end
+        end
       end
     end
 
