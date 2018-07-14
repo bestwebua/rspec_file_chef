@@ -11,7 +11,7 @@ module RspecFileEnv
 
     describe '.config accepting' do
       let(:empty_config) do
-        FileChef.config.instance_variable_get(:@config).values.all?(&:nil?)
+        subject.class.config.instance_variable_get(:@config).values.all?(&:nil?)
       end
 
       context 'not set' do
@@ -26,7 +26,7 @@ module RspecFileEnv
         let(:custom_test_dir_path) { "#{rspec_path}/test_dir" }
 
         before do
-          FileChef.configure do |config|
+          subject.class.configure do |config|
             config.rspec_path = rspec_path
             config.custom_tmp_dir = custom_tmp_dir_path
             config.custom_test_dir = custom_test_dir_path
@@ -38,15 +38,15 @@ module RspecFileEnv
         end
 
         it 'rspec_path exists' do
-          expect(FileChef.config.rspec_path).to eq(rspec_path)
+          expect(subject.class.config.rspec_path).to eq(rspec_path)
         end
 
         it 'custom_tmp_dir exists' do
-          expect(FileChef.config.custom_tmp_dir).to eq(custom_tmp_dir_path)
+          expect(subject.class.config.custom_tmp_dir).to eq(custom_tmp_dir_path)
         end
 
         it 'custom_test_dir exists' do
-          expect(FileChef.config.custom_test_dir).to eq(custom_test_dir_path)
+          expect(subject.class.config.custom_test_dir).to eq(custom_test_dir_path)
         end
       end
     end
@@ -116,7 +116,7 @@ module RspecFileEnv
 
       before do
         instance_methods.each do |method|
-          allow_any_instance_of(FileChef).to receive(method).and_return(true)
+          allow_any_instance_of(subject.class).to receive(method).and_return(true)
         end
       end
 
