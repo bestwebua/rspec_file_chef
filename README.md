@@ -1,5 +1,5 @@
 # RSpec File Chef
-The main idea of this gem is saving previous state of tracking files after running RSpec. It should be helpful when your project using own local files for record some data or a log. And you don't want that RSpec will change it, or after tests you will get a lot of temporary test files in your project root folder.
+The main idea of this gem is saving previous state of tracking files after running RSpec. It should be helpful when your project is using own local files for record some data or a log. And you don't want that RSpec will change it. Or you don't want to get a lot of temporary test files in your project root folder after your tests complete.
 
 ## Features
 
