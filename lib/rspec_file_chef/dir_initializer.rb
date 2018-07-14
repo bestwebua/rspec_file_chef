@@ -2,7 +2,7 @@ module RspecFileChef
   module DirInitializer
     HELPER_PATH = 'support/helpers/file_chef'.freeze
 
-    attr_reader :rspec_path
+    attr_reader :tmp_dir, :test_dir, :rspec_path
 
     private
 

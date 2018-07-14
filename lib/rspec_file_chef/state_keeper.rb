@@ -1,6 +1,6 @@
 module RspecFileChef
   module StateKeeper
-    attr_reader :tmp_dir, :test_dir, :tracking_files, :path_table
+    attr_reader :tracking_files, :path_table
 
     def test_files
       path_table.map do |file_name, _|
