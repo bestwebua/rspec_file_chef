@@ -1,4 +1,4 @@
-module RspecFileEnv
+module RspecFileChef
   module StateKeeper
     attr_reader :tmp_dir, :test_dir, :tracking_files, :path_table
 

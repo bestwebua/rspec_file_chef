@@ -1,4 +1,4 @@
-module RspecFileEnv
+module RspecFileChef
   RSpec.describe FileChef do
     before do
       allow_any_instance_of(FileChef).to receive(:set_rspec_path).and_return(true)

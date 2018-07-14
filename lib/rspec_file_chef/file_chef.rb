@@ -1,4 +1,4 @@
-module RspecFileEnv
+module RspecFileChef
   class FileChef
     include DirInitializer
     include StateKeeper

@@ -1,4 +1,4 @@
-module RspecFileEnv
+module RspecFileChef
   module DirInitializer
     HELPER_PATH = 'support/helpers/file_chef'.freeze
 

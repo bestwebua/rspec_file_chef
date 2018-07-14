@@ -1,0 +1,6 @@
+require 'dry-configurable'
+require_relative 'rspec_file_chef/version'
+require_relative 'rspec_file_chef/error'
+require_relative 'rspec_file_chef/dir_initializer'
+require_relative 'rspec_file_chef/state_keeper'
+require_relative 'rspec_file_chef/file_chef'

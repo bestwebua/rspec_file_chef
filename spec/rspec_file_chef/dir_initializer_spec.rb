@@ -1,4 +1,4 @@
-module RspecFileEnv
+module RspecFileChef
   TestClass = Class.new do
     include DirInitializer
     extend Dry::Configurable
@@ -291,6 +291,16 @@ module RspecFileEnv
       end
     end
 
+    describe '#set_dir_paths' do
+      describe 'scenario' do
+        context 'custom paths needed' do
+          
+        end
 
+        context 'custom paths not needed' do
+          
+        end
+      end
+    end
   end
 end

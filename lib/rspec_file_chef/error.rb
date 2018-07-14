@@ -1,4 +1,4 @@
-module RspecFileEnv
+module RspecFileChef
   module Error
     RSPEC_PATH = 'Wrong rspec path.'.freeze
     CONFIG = 'Config error. You should specify custom tmp_dir and test_dir params.'.freeze

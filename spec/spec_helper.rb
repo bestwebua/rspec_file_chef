@@ -1,5 +1,5 @@
 require 'bundler/setup'
-require 'rspec_file_env'
+require 'rspec_file_chef'
 
 rspec_custom = File.join(File.dirname(__FILE__), 'support/**/*.rb')
 Dir[File.expand_path(rspec_custom)].each { |file| require file }

@@ -1,16 +1,16 @@
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'rspec_file_env/version'
+require 'rspec_file_chef/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'rspec_file_env'
-  spec.version       = RspecFileEnv::VERSION
+  spec.name          = 'rspec_file_chef'
+  spec.version       = RspecFileChef::VERSION
   spec.authors       = ['Vladislav Trotsenko']
   spec.email         = ['admin@bestweb.com.ua']
 
-  spec.summary       = %q{RspecFileEnv}
+  spec.summary       = %q{RspecFileChef}
   spec.description   = %q{RSpec File Environment control. Keeper of previous state of tracking files and temporary test files cleaner.}
-  spec.homepage      = 'https://github.com/bestwebua/rspec_file_env'
+  spec.homepage      = 'https://github.com/bestwebua/rspec_file_chef'
   spec.license       = 'MIT'
 
   spec.required_ruby_version = '>= 2.5.0'
