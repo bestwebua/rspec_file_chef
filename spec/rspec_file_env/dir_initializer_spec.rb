@@ -264,7 +264,31 @@ module RspecFileEnv
     end
 
     describe '#create_helper_dir' do
+      describe 'scenario' do
+        let(:create_helper_dir) { subject.send(:create_helper_dir) }
+        let(:new_dir_location) do
+          "#{subject.rspec_path}/#{DirInitializer::HELPER_PATH}"
+        end
 
+        before do
+          allow(subject).to receive(:default_rspec_path).and_return(this_path)
+          subject.send(:set_rspec_path)
+        end
+
+        after { FileUtils.remove_dir(new_dir_location) }
+
+        context 'create folder' do
+          before { create_helper_dir }
+          specify { expect(Dir.exist?(new_dir_location)).to be(true) }
+        end
+
+        context 'returns new folders paths' do
+          specify { expect(create_helper_dir).to be_an_instance_of(Array) }
+          specify { expect(create_helper_dir).to_not be_empty }
+          specify { expect(create_helper_dir.first).to eq("#{new_dir_location}/temp_data") }
+          specify { expect(create_helper_dir.last).to eq("#{new_dir_location}/test_data") }
+        end
+      end
     end
 
 
