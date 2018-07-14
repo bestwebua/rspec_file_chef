@@ -33,8 +33,16 @@ module RspecFileEnv
       [custom_tmp_dir, custom_test_dir]
     end
 
+    def any_custom_path(&block)
+      custom_paths.any?(&block)
+    end
+
+    def not_exist?
+      lambda { |path| !Dir.exist?(path) }
+    end
+
     def check_config
-      raise Error::CONFIG if custom_paths.any?(&:nil?)
+      raise Error::CONFIG if any_custom_path(&:nil?)
       true
     end
 
@@ -44,7 +52,7 @@ module RspecFileEnv
     end
 
     def check_custom_paths
-      raise Error::CUSTOM_PATHS if custom_paths.any? { |path| !Dir.exist?(path) }
+      raise Error::CUSTOM_PATHS if any_custom_path(&not_exist?)
     end
 
     def create_helper_dir
