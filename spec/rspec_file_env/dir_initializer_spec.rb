@@ -202,6 +202,30 @@ module RspecFileEnv
       end
     end
 
+    describe '#check_custom_paths' do
+      describe 'scenario' do
+        context 'non existent paths' do
+          before do
+            allow(subject).to receive(:custom_paths).and_return(['/non_existent_path'])
+          end
+
+          specify do
+            expect {subject.send(:check_custom_paths)}.to raise_error(RuntimeError, Error::CUSTOM_PATHS)
+          end
+        end
+
+        context 'existent paths' do
+          before do
+            allow(subject).to receive(:custom_paths).and_return([this_path, this_path])
+            subject.send(:check_custom_paths)
+          end
+
+          after { subject.send(:check_custom_paths) }
+          specify { expect(subject).to receive(:custom_paths) }
+        end
+      end
+    end
+
 
   end
 end
