@@ -169,6 +169,39 @@ module RspecFileEnv
       end
     end
 
+    describe '#custom_paths_needed?' do
+      describe 'scenario' do
+        context 'rspec_path was set' do
+          let(:rspec_path_true) { allow(subject).to receive(:rspec_path).and_return(true) }
+
+          context 'metod call' do
+            before { rspec_path_true; subject.send(:custom_paths_needed?) }
+            after { subject.send(:custom_paths_needed?) }
+            specify { expect(subject).to receive(:rspec_path) }
+          end
+
+          context 'returns boolean' do
+            before { rspec_path_true }
+            specify { expect(subject.send(:custom_paths_needed?)).to be(false) }
+          end
+        end
+
+        context 'other paths was set' do
+          before do
+            allow(subject).to receive(:rspec_path).and_return(false)
+            allow(subject).to receive(:check_config)
+            subject.send(:custom_paths_needed?)
+          end
+
+          after { subject.send(:custom_paths_needed?) }
+
+          context 'metod call' do
+            specify { expect(subject).to receive(:check_config) }
+          end
+        end
+      end
+    end
+
 
   end
 end
