@@ -292,13 +292,53 @@ module RspecFileChef
     end
 
     describe '#set_dir_paths' do
-      describe 'scenario' do
-        context 'custom paths needed' do
-          
+      describe 'set instance var' do
+        let(:custom_paths_list) { %w[temp_data test_data] }
+        let(:tmp_dir) { expect(subject.tmp_dir).to eq(custom_paths_list.first) }
+        let(:test_dir) { expect(subject.test_dir).to eq(custom_paths_list.last) }
+
+        shared_examples(:set_dir_paths_examples) do
+          specify { method }
         end
 
-        context 'custom paths not needed' do
-          
+        describe 'scenario' do
+          context 'custom paths needed' do
+            before do
+              allow(subject).to receive(:custom_paths_needed?).and_return(true)
+              allow(subject).to receive(:any_custom_path).and_return(false)
+              allow(subject).to receive(:check_custom_paths)
+              allow(subject).to receive(:custom_paths).and_return(custom_paths_list)
+              subject.send(:set_dir_paths)
+            end
+
+            context '@temp_dir' do
+              let(:method) { tmp_dir }
+              it_behaves_like(:set_dir_paths_examples)
+            end
+
+            context '@test_dir' do
+              let(:method) { test_dir }
+              it_behaves_like(:set_dir_paths_examples)
+            end
+          end
+
+          context 'custom paths not needed' do
+            before do
+              allow(subject).to receive(:custom_paths_needed?).and_return(false)
+              allow(subject).to receive(:create_helper_dir).and_return(custom_paths_list)
+              subject.send(:set_dir_paths)
+            end
+
+            context '@temp_dir' do
+              let(:method) { tmp_dir }
+              it_behaves_like(:set_dir_paths_examples)
+            end
+
+            context '@test_dir' do
+              let(:method) { test_dir }
+              it_behaves_like(:set_dir_paths_examples)
+            end
+          end
         end
       end
     end
