@@ -110,6 +110,23 @@ module RspecFileEnv
       end
     end
 
+    describe '#custom_paths' do
+      specify { expect(subject.send(:custom_paths)).to be_an_instance_of(Array) }
+
+      context 'method call' do
+        before do
+          allow(subject).to receive(:custom_tmp_dir)
+          allow(subject).to receive(:custom_tmp_dir)
+          subject.send(:custom_paths)
+        end
+
+        after { subject.send(:custom_paths) }
+
+        specify { expect(subject).to receive(:custom_tmp_dir) }
+        specify { expect(subject).to receive(:custom_test_dir) }
+      end
+    end
+
 
   end
 end
