@@ -1,12 +1,4 @@
 module RspecFileChef
-  TestClass = Class.new do
-    include DirInitializer
-    extend Dry::Configurable
-    setting :rspec_path
-    setting :custom_tmp_dir
-    setting :custom_test_dir
-  end
-
   RSpec.describe TestClass do
     let(:this_path)       { File.expand_path(__dir__) }
     let(:rspec_path)      { this_path }
