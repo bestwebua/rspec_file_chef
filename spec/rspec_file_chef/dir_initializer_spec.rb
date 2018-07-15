@@ -28,18 +28,84 @@ module RspecFileChef
     end
 
     describe '#rspec_pattern' do
-      let(:regex_pattern) { subject.send(:rspec_pattern) }
-      let(:right_path_1)   { %w[/path/spec /path/spec/ /path/spec/spec /path/spec/spec/] }
-      let(:one_level_path) { lambda { |path| path[regex_pattern] == '/path' } }
-      let(:right_path_2)   { %w[/path/rspec/spec /path/rspec/spec/ /path/rspec/spec/path /path/rspec/spec/path/] }
-      let(:two_level_path) { lambda { |path| path[regex_pattern] == '/path/rspec' } }
-      let(:wrong_path)     { %w[/path/speca /path/speca/] }
-      let(:nil_path)       { lambda { |path| path[regex_pattern].nil? } }
+      shared_examples(:regex_parse) do
+        specify { expect(string[regex_pattern]).to eq(result) }
+      end
 
-      specify { expect(regex_pattern).to be_an_instance_of(Regexp) }
-      specify { expect(right_path_1.all?(&one_level_path)).to be(true) }
-      specify { expect(right_path_2.all?(&two_level_path)).to be(true) }
-      specify { expect(wrong_path.all?(&nil_path)).to be(true) }
+      let(:regex_pattern) { subject.send(:rspec_pattern) }
+
+      context 'returns Regex object' do
+        specify { expect(regex_pattern).to be_an_instance_of(Regexp) }
+      end
+
+      context 'one-level path' do
+        let(:one_level_path) { '/path' }
+        context 'test string 1' do
+          let(:string) { '/path/spec' }
+          let(:result) { one_level_path }
+          it_behaves_like(:regex_parse)
+        end
+
+        context 'test string 2' do
+          let(:string) { '/path/spec/' }
+          let(:result) { one_level_path }
+          it_behaves_like(:regex_parse)
+        end
+
+        context 'test string 3' do
+          let(:string) { '/path/spec/spec' }
+          let(:result) { one_level_path }
+          it_behaves_like(:regex_parse)
+        end
+
+        context 'test string 4' do
+          let(:string) { '/path/spec/spec/' }
+          let(:result) { one_level_path }
+          it_behaves_like(:regex_parse)
+        end
+      end
+
+      context 'two-level path' do
+        let(:two_level_path) { '/path/rspec' }
+        context 'test string 1' do
+          let(:string) { '/path/rspec/spec' }
+          let(:result) { two_level_path }
+          it_behaves_like(:regex_parse)
+        end
+
+        context 'test string 2' do
+          let(:string) { '/path/rspec/spec/' }
+          let(:result) { two_level_path }
+          it_behaves_like(:regex_parse)
+        end
+
+        context 'test string 3' do
+          let(:string) { '/path/rspec/spec/path' }
+          let(:result) { two_level_path }
+          it_behaves_like(:regex_parse)
+        end
+
+        context 'test string 4' do
+          let(:string) { '/path/rspec/spec/path/' }
+          let(:result) { two_level_path }
+          it_behaves_like(:regex_parse)
+        end
+      end
+
+      context 'wrong path' do
+        let(:wrong_path) { nil }
+        context 'test string 1' do
+          let(:string) { '/path/speca' }
+          let(:result) { wrong_path }
+          it_behaves_like(:regex_parse)
+        end
+
+        context 'test string 2' do
+          let(:string) { '/path/speca/' }
+          let(:result) { wrong_path }
+          it_behaves_like(:regex_parse)
+        end
+      end
     end
 
     describe 'class config getters' do
