@@ -1,5 +1,7 @@
 module RspecFileChef
   RSpec.describe TestClass do
+    let(:test_examples_path) { File.expand_path("../support/test_examples", __dir__) }
+
     describe '#tracking_files' do
       specify { expect(subject.tracking_files).to be_an_instance_of(Array) }
     end
@@ -81,6 +83,49 @@ module RspecFileChef
         let(:first_group) { nil }
         let(:second_group) { nil }
         it_behaves_like(:regex_parse)
+      end
+    end
+
+    describe '#create_path_table' do
+      before do
+        allow(subject).to receive(:tracking_files).and_return(test_tracking_files)
+        subject.send(:create_path_table)
+      end
+
+      let(:test_tracking_files) do
+        [
+         "#{test_examples_path}/target_folder/target_file_1",
+         "#{test_examples_path}/target_folder/virual_folder/target_file_2"
+        ]
+      end
+
+      shared_examples(:file_in_path_table) do
+        def target_file_data(index)
+          file_pattern = subject.send(:file_pattern)
+          file_path = subject.tracking_files[index]
+          file_name = file_path[/#{file_pattern}/,2]
+          file_dir = file_path[/#{file_pattern}/,1]
+          dir_exist = File.exist?(file_dir)
+          [file_name, [file_path, file_dir, dir_exist]]
+        end
+
+        specify do
+          expect(subject.path_table.to_a[index]).to eq(target_file_data(index))
+        end
+      end
+
+      context 'path_table should be created' do
+        specify { expect(subject.path_table).not_to be_empty }
+      end
+
+      context 'target file 1' do
+        let(:index) { 0 }
+        it_behaves_like(:file_in_path_table)
+      end
+
+      context 'target file 2' do
+        let(:index) { 1 }
+        it_behaves_like(:file_in_path_table)
       end
     end
 
