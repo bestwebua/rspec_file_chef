@@ -177,5 +177,24 @@ module RspecFileChef
       specify { expect(Dir.entries(target_dir)).to include('virtual_dir') }
     end
 
+    describe '#same_file_path' do
+      before { create_path_table }
+      after { clear_target_dir }
+
+      let(:tracked_file_path) { subject.path_table['target_file_1'][1] }
+
+      context 'test file with existen name like key in path table' do
+        specify do
+          expect(subject.send(:same_file_path, '/path/target_file_1')).to eq(tracked_file_path)
+        end
+      end
+
+      context 'test file with non existen name like key in path table' do
+        specify do
+          expect(subject.send(:same_file_path, '/path/target_file')).to eq(nil)
+        end
+      end
+    end
+
   end
 end
