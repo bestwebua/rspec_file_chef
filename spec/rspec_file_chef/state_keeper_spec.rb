@@ -1,6 +1,27 @@
 module RspecFileChef
   RSpec.describe TestClass do
-    let(:test_examples_path) { File.expand_path("../support/test_examples", __dir__) }
+    let(:test_examples_path)    { File.expand_path("../support/test_examples", __dir__) }
+    let(:test_dir)              { "#{test_examples_path}/test_dir" }
+    let(:tmp_dir)               { "#{test_examples_path}/temp_dir" }
+    let(:target_dir)            { "#{test_examples_path}/target_dir" }
+    let(:target_files_examples) { "#{test_examples_path}/target_files_examples" }
+    let(:copy_target_files)     { FileUtils.cp_r("#{target_files_examples}/.", target_dir) }
+    let(:clear_target_dir)      { FileUtils.rm_r(Dir.glob("#{target_dir}/*")) }
+    let(:clear_tmp_dir)         { FileUtils.rm_r(Dir.glob("#{tmp_dir}/*")) }
+    let(:regex_pattern)         { subject.send(:file_pattern) }
+
+    let(:create_path_table) do
+      copy_target_files
+      allow(subject).to receive(:tracking_files).and_return(test_tracking_files)
+      subject.send(:create_path_table)
+    end
+
+    let(:test_tracking_files) do
+      [
+       "#{test_examples_path}/target_dir/target_file_1",
+       "#{test_examples_path}/target_dir/virual_folder/target_file_2"
+      ]
+    end
 
     describe '#tracking_files' do
       specify { expect(subject.tracking_files).to be_an_instance_of(Array) }
@@ -15,8 +36,6 @@ module RspecFileChef
         specify { expect(string[/#{regex_pattern}/,1]).to eq(first_group) }
         specify { expect(string[/#{regex_pattern}/,2]).to eq(second_group) }
       end
-
-      let(:regex_pattern) { subject.send(:file_pattern) }
 
       context 'returns Regex object' do
         specify { expect(regex_pattern).to be_an_instance_of(Regexp) }
@@ -87,17 +106,8 @@ module RspecFileChef
     end
 
     describe '#create_path_table' do
-      before do
-        allow(subject).to receive(:tracking_files).and_return(test_tracking_files)
-        subject.send(:create_path_table)
-      end
-
-      let(:test_tracking_files) do
-        [
-         "#{test_examples_path}/target_folder/target_file_1",
-         "#{test_examples_path}/target_folder/virual_folder/target_file_2"
-        ]
-      end
+      before { create_path_table }
+      after { clear_target_dir }
 
       shared_examples(:file_in_path_table) do
         def target_file_data(index)
@@ -130,7 +140,32 @@ module RspecFileChef
     end
 
     describe '#test_files' do
+      before { create_path_table }
+      after { clear_target_dir }
       specify { expect(subject.test_files).to be_an_instance_of(Array) }
+      specify { expect(subject.test_files).to eq(%w[/target_file_1 /target_file_2]) }
     end
+
+    describe '#move_to_tmp_dir' do
+      before do
+        create_path_table
+        allow(subject).to receive(:tmp_dir).and_return(tmp_dir)
+        subject.send(:move_to_tmp_dir)
+      end
+
+      after { clear_target_dir; clear_tmp_dir }
+
+      let(:target_file) { 'target_file_1' }
+
+      context 'temp dir' do
+        specify { expect(Dir.entries(tmp_dir)).to include(target_file) }
+      end
+
+      context 'target dir' do
+        specify { expect(Dir.entries(target_dir)).not_to include(target_file) }
+      end
+    end
+
+    
   end
 end
