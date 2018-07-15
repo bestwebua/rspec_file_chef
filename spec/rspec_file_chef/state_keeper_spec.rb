@@ -19,7 +19,7 @@ module RspecFileChef
     let(:test_tracking_files) do
       [
        "#{test_examples_path}/target_dir/target_file_1",
-       "#{test_examples_path}/target_dir/virual_folder/target_file_2"
+       "#{test_examples_path}/target_dir/virtual_dir/target_file_2"
       ]
     end
 
@@ -166,6 +166,16 @@ module RspecFileChef
       end
     end
 
-    
+    describe '#create_nonexistent_dirs' do
+      before do
+        create_path_table
+        subject.send(:create_nonexistent_dirs)
+      end
+
+      after { clear_target_dir }
+
+      specify { expect(Dir.entries(target_dir)).to include('virtual_dir') }
+    end
+
   end
 end
