@@ -1,4 +1,9 @@
-require 'bundler/setup'
+require 'simplecov'
+
+SimpleCov.start do
+  add_filter 'spec/'
+end
+
 require 'rspec_file_chef'
 
 rspec_custom = File.join(File.dirname(__FILE__), 'support/**/*.rb')
