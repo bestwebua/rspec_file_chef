@@ -11,6 +11,7 @@ module RspecFileChef
     let(:set_tmp_dir)           { allow(subject).to receive(:tmp_dir).and_return(tmp_dir) }
     let(:set_test_dir)          { allow(subject).to receive(:test_dir).and_return(test_dir) }
     let(:regex_pattern)         { subject.send(:file_pattern) }
+    let(:target_dir_files)      { get_dir_files(target_dir) }
 
     let(:test_tracking_files) do
       [
@@ -26,12 +27,21 @@ module RspecFileChef
       subject.send(:create_path_table)
     end
 
-    let(:target_dir_files) do
-      target_dir_entries = Dir.glob("#{target_dir}/**/*")
+    def get_dir_files(location)
+      target_dir_entries = Dir.glob("#{location}/**/*")
       file_names = target_dir_entries.map do |entry|
         entry[/#{regex_pattern}/,2] if File.file?(entry)
       end
       file_names.compact
+    end
+
+    def target_file_data(index)
+      file_pattern = subject.send(:file_pattern)
+      file_path = subject.tracking_files[index]
+      file_name = file_path[/#{file_pattern}/,2]
+      file_dir = file_path[/#{file_pattern}/,1]
+      dir_exist = File.exist?(file_dir)
+      [file_name, [file_path, file_dir, dir_exist]]
     end
 
     describe '#tracking_files' do
@@ -121,15 +131,6 @@ module RspecFileChef
       after { clear_target_dir }
 
       shared_examples(:file_in_path_table) do
-        def target_file_data(index)
-          file_pattern = subject.send(:file_pattern)
-          file_path = subject.tracking_files[index]
-          file_name = file_path[/#{file_pattern}/,2]
-          file_dir = file_path[/#{file_pattern}/,1]
-          dir_exist = File.exist?(file_dir)
-          [file_name, [file_path, file_dir, dir_exist]]
-        end
-
         specify do
           expect(subject.path_table.to_a[index]).to eq(target_file_data(index))
         end
@@ -295,6 +296,29 @@ module RspecFileChef
         context 'not tracked file' do
           specify { expect(target_dir_files).to include('not_target_file') }
         end
+      end
+    end
+
+    describe '#restore_tracking_files' do
+      before do
+        create_path_table
+        set_tmp_dir
+        subject.send(:move_to_tmp_dir)
+        subject.send(:create_nonexistent_dirs)
+        subject.send(:restore_tracking_files)
+      end
+
+      after { clear_target_dir }
+
+      context 'tmp dir' do
+        specify { expect(get_dir_files(tmp_dir)).to be_empty }
+      end
+
+      context 'target dir' do
+        specify { expect(target_dir_files).not_to be_empty }
+        specify { expect(target_dir_files).to include('target_file_1') }
+        specify { expect(target_dir_files).to include('target_file_2') }
+        specify { expect(target_dir_files).not_to include('target_file_3') }
       end
     end
 
