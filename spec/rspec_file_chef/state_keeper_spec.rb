@@ -133,7 +133,11 @@ module RspecFileChef
 
     describe '#discover_path_depth' do
       specify { expect{subject.send(:discover_path_depth)}.to raise_error(ArgumentError) }
-      specify { expect{subject.send(:discover_path_depth, 'path_without_slash')}.to raise_error(RuntimeError, 'Wrong path!') }
+
+      specify do
+        expect{subject.send(:discover_path_depth, 'path_without_slash')}.to raise_error(RuntimeError, 'Wrong path!')
+      end
+      
       specify { expect(subject.send(:discover_path_depth, '/path')).to be_an_instance_of(Array) }
       
       describe 'scenario' do
