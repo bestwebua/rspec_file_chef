@@ -126,6 +126,12 @@ module RspecFileChef
       end
     end
 
+    describe '#last_real_path' do
+      specify { expect{subject.send(:last_real_path)}.to raise_error(ArgumentError) }
+      specify { expect(subject.send(:last_real_path, 'wrong_path')).to be_nil }
+      specify { expect(subject.send(:last_real_path, test_tracking_files.last)).to eq(target_dir) }
+    end
+
     describe '#create_path_table' do
       before { create_path_table }
       after { clear_target_dir }
@@ -322,5 +328,6 @@ module RspecFileChef
       end
     end
 
+    
   end
 end
