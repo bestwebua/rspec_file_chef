@@ -30,7 +30,7 @@ module RspecFileChef
     def create_nonexistent_dirs
       path_table.each do |_, file|
         file_dir, dir_exists = file[1..-1]
-        Dir.mkdir(file_dir) unless dir_exists
+        FileUtils.mkdir_p(file_dir) unless dir_exists
       end
     end
 
