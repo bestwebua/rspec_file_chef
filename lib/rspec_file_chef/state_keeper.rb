@@ -53,7 +53,7 @@ module RspecFileChef
     end
 
     def restore_tracking_files
-      Dir.glob("#{tmp_dir}/*.*").each do |file|
+      Dir.glob("#{tmp_dir}/*").each do |file|
         FileUtils.mv(file, same_file_path(file), force: true)
       end
     end
