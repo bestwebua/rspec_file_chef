@@ -12,18 +12,26 @@ module RspecFileChef
     let(:set_test_dir)          { allow(subject).to receive(:test_dir).and_return(test_dir) }
     let(:regex_pattern)         { subject.send(:file_pattern) }
 
-    let(:create_path_table) do
-      copy_target_files
-      allow(subject).to receive(:tracking_files).and_return(test_tracking_files)
-      subject.send(:create_path_table)
-    end
-
     let(:test_tracking_files) do
       [
        "#{test_examples_path}/target_dir/target_file_1",
        "#{test_examples_path}/target_dir/real_dir/target_file_2",
        "#{test_examples_path}/target_dir/virtual_dir_1/virtual_dir_2/target_file_3"
       ]
+    end
+
+    let(:create_path_table) do
+      copy_target_files
+      allow(subject).to receive(:tracking_files).and_return(test_tracking_files)
+      subject.send(:create_path_table)
+    end
+
+    let(:target_dir_files) do
+      target_dir_entries = Dir.glob("#{target_dir}/**/*")
+      file_names = target_dir_entries.map do |entry|
+        entry[/#{regex_pattern}/,2] if File.file?(entry)
+      end
+      file_names.compact
     end
 
     describe '#tracking_files' do
@@ -247,14 +255,6 @@ module RspecFileChef
 
       after { clear_target_dir; clear_tmp_dir }
 
-      let(:target_dir_files) do
-        target_dir_entries = Dir.glob("#{target_dir}/**/*")
-        file_names = target_dir_entries.map do |entry|
-          entry[/#{regex_pattern}/,2] if File.file?(entry)
-        end
-        file_names.compact
-      end
-
       describe 'scenario' do
         context 'file in test dir' do
           context 'has same file in path table' do
@@ -274,6 +274,26 @@ module RspecFileChef
           context 'has no same file in path table' do
             specify { expect(target_dir_files).not_to include('target_file_4') }
           end
+        end
+      end
+    end
+
+    describe '#delete_test_files' do
+      before do
+        create_path_table
+        subject.send(:delete_test_files)
+      end
+
+      after { clear_target_dir }
+
+      describe 'scenario' do
+        context 'tracked file' do
+          specify { expect(target_dir_files).not_to include('target_file_1') }
+          specify { expect(target_dir_files).not_to include('target_file_2') }
+        end
+
+        context 'not tracked file' do
+          specify { expect(target_dir_files).to include('not_target_file') }
         end
       end
     end
