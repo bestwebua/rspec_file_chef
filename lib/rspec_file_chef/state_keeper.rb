@@ -14,6 +14,12 @@ module RspecFileChef
       %r{\A(.+)\/([^\/]+)\z}
     end
 
+    def last_real_path(dir_path)
+      paths = dir_path[1..-1].split('/').map { |item| "/#{item}" }
+      paths = paths.each_with_index.map { |item, index| paths[0..index].join }
+      paths.reverse.find { |path| Dir.exist?(path) }
+    end
+
     def create_path_table
       tracking_files.each do |file|
         file_dir = file[/#{file_pattern}/,1]
