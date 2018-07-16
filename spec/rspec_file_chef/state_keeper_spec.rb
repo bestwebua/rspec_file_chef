@@ -8,6 +8,8 @@ module RspecFileChef
     let(:copy_target_files)     { FileUtils.cp_r("#{target_files_examples}/.", target_dir) }
     let(:clear_target_dir)      { FileUtils.rm_r(Dir.glob("#{target_dir}/*")) }
     let(:clear_tmp_dir)         { FileUtils.rm_r(Dir.glob("#{tmp_dir}/*")) }
+    let(:set_tmp_dir)           { allow(subject).to receive(:tmp_dir).and_return(tmp_dir) }
+    let(:set_test_dir)          { allow(subject).to receive(:test_dir).and_return(test_dir) }
     let(:regex_pattern)         { subject.send(:file_pattern) }
 
     let(:create_path_table) do
@@ -156,7 +158,7 @@ module RspecFileChef
     describe '#move_to_tmp_dir' do
       before do
         create_path_table
-        allow(subject).to receive(:tmp_dir).and_return(tmp_dir)
+        set_tmp_dir
         subject.send(:move_to_tmp_dir)
       end
 
@@ -234,8 +236,45 @@ module RspecFileChef
     end
 
     describe '#copy_from_test_dir' do
+      before do
+        create_path_table
+        set_tmp_dir
+        subject.send(:move_to_tmp_dir)
+        subject.send(:create_nonexistent_dirs)
+        set_test_dir
+        subject.send(:copy_from_test_dir)
+      end
+
+      after { clear_target_dir; clear_tmp_dir }
+
+      let(:target_dir_files) do
+        target_dir_entries = Dir.glob("#{target_dir}/**/*")
+        file_names = target_dir_entries.map do |entry|
+          entry[/#{regex_pattern}/,2] if File.file?(entry)
+        end
+        file_names.compact
+      end
+
       describe 'scenario' do
-        
+        context 'file in test dir' do
+          context 'has same file in path table' do
+            it 'file in target dir: zero level' do
+              expect(target_dir_files).to include('target_file_1')
+            end
+
+            it 'file in target dir: first level' do
+              expect(target_dir_files).to include('target_file_2')
+            end
+
+            it 'file in target dir: second level' do
+              expect(target_dir_files).to include('target_file_3')
+            end
+          end
+
+          context 'has no same file in path table' do
+            specify { expect(target_dir_files).not_to include('target_file_4') }
+          end
+        end
       end
     end
 
