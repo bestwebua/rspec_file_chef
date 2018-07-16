@@ -41,7 +41,12 @@ module RspecFileChef
       file_name = file_path[/#{file_pattern}/,2]
       file_dir = file_path[/#{file_pattern}/,1]
       dir_exist = File.exist?(file_dir)
-      [file_name, [file_path, file_dir, dir_exist]]
+      level_depth = subject.send(:existing_level_depth, file_dir)
+      [file_name, [file_path, file_dir, dir_exist, level_depth]]
+    end
+
+    def nonexistent_dir?(path)
+      subject.path_table.values.map { |item| [item[1], item[2]] }.to_h[path]
     end
 
     describe '#tracking_files' do
@@ -126,10 +131,38 @@ module RspecFileChef
       end
     end
 
-    describe '#last_real_path' do
-      specify { expect{subject.send(:last_real_path)}.to raise_error(ArgumentError) }
-      specify { expect(subject.send(:last_real_path, 'wrong_path')).to be_nil }
-      specify { expect(subject.send(:last_real_path, test_tracking_files.last)).to eq(target_dir) }
+    describe '#discover_path_depth' do
+      specify { expect{subject.send(:discover_path_depth)}.to raise_error(ArgumentError) }
+      specify { expect{subject.send(:discover_path_depth, 'path_without_slash')}.to raise_error(RuntimeError, 'Wrong path!') }
+      specify { expect(subject.send(:discover_path_depth, '/path')).to be_an_instance_of(Array) }
+      
+      describe 'scenario' do
+        context 'one level path' do
+          let(:path) { '/path' }
+          specify { expect(subject.send(:discover_path_depth, path).size).to eq(1) }
+          specify { expect(subject.send(:discover_path_depth, path).first).to eq(path) }
+        end
+
+        context 'two level path' do
+          let(:path) { '/path/path' }
+          let(:discover_path_depth) { subject.send(:discover_path_depth, path) }
+          specify { expect(discover_path_depth.size).to eq(2) }
+          specify { expect(discover_path_depth.first).to eq(path) }
+          specify { expect(discover_path_depth.last).to eq('/path') }
+        end
+
+        context 'access by index' do
+          specify { expect(subject.send(:discover_path_depth, '/other_path')[0]).to eq('/other_path') }
+        end
+      end
+    end
+
+    describe '#existing_level_depth' do
+      before { copy_target_files }
+      after { clear_target_dir }
+      specify { expect{subject.send(:existing_level_depth)}.to raise_error(ArgumentError) }
+      specify { expect(subject.send(:existing_level_depth, "#{target_dir}/real_dir")).to eq(0) }
+      specify { expect(subject.send(:existing_level_depth, "#{target_dir}/virtual_dir")).to eq(1) }
     end
 
     describe '#create_path_table' do
@@ -328,6 +361,25 @@ module RspecFileChef
       end
     end
 
-    
+    describe '#delete_nonexistent_dirs' do
+      before do
+        create_path_table
+        clear_target_dir
+        subject.send(:create_nonexistent_dirs)
+        subject.send(:delete_nonexistent_dirs)
+      end
+
+      let(:target_dir_dirs) do
+        Dir[File.join(File.expand_path(target_dir), '*')].select { |entry| File.directory?(entry) }
+      end
+
+      let(:total_nonexistent_dirs) do
+        target_dir_dirs.count { |dir| !nonexistent_dir?(dir) }
+      end
+
+      specify do
+        expect(total_nonexistent_dirs).to be_zero
+      end
+    end
   end
 end
