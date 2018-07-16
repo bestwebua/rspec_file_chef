@@ -41,7 +41,7 @@ module RspecFileChef
     end
 
     def copy_from_test_dir
-      Dir.glob("#{test_dir}/*.*").each do |file|
+      Dir.glob("#{test_dir}/*").each do |file|
         FileUtils.cp(file, same_file_path(file)) if same_file_path(file)
       end
     end
