@@ -14,16 +14,22 @@ module RspecFileChef
       %r{\A(.+)\/([^\/]+)\z}
     end
 
-    def last_real_path(dir_path)
+    def discover_path_depth(dir_path)
+      raise 'Wrong path!' unless dir_path[/\A\//]
       paths = dir_path[1..-1].split('/').map { |item| "/#{item}" }
-      paths = paths.each_with_index.map { |item, index| paths[0..index].join }
-      paths.reverse.find { |path| Dir.exist?(path) }
+      paths.each_with_index.map { |item, index| paths[0..index].join }.reverse
+    end
+
+    def existing_level_depth(dir_path)
+      discover_path_depth(dir_path).index { |path| Dir.exist?(path) }
     end
 
     def create_path_table
       tracking_files.each do |file|
-        file_dir = file[/#{file_pattern}/,1]
-        path_table[file[/#{file_pattern}/,2]] = [file, file_dir, File.exist?(file_dir)]
+        parent_dir = file[/#{file_pattern}/,1]
+        status = File.exist?(parent_dir)
+        level_depth = existing_level_depth(parent_dir)
+        path_table[file[/#{file_pattern}/,2]] = [file, parent_dir, status, level_depth]
       end
     end
 
@@ -66,8 +72,10 @@ module RspecFileChef
 
     def delete_nonexistent_dirs
       path_table.each do |_, file|
-        file_dir, dir_exists = file[1..-1]
-        Dir.rmdir(file_dir) unless dir_exists
+        parent_dir, dir_exists, level_depth = file[1..-1]
+        level_depth-=1 unless level_depth.zero?
+        candidate_to_erase = discover_path_depth(parent_dir)[level_depth]
+        FileUtils.rm_r(candidate_to_erase) unless dir_exists
       end
     end
   end
