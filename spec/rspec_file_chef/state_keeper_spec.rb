@@ -19,7 +19,8 @@ module RspecFileChef
     let(:test_tracking_files) do
       [
        "#{test_examples_path}/target_dir/target_file_1",
-       "#{test_examples_path}/target_dir/virtual_dir/target_file_2"
+       "#{test_examples_path}/target_dir/real_dir/target_file_2",
+       "#{test_examples_path}/target_dir/virtual_dir_1/virtual_dir_2/target_file_3"
       ]
     end
 
@@ -128,14 +129,20 @@ module RspecFileChef
         specify { expect(subject.path_table).not_to be_empty }
       end
 
-      context 'target file 1' do
-        let(:index) { 0 }
-        it_behaves_like(:file_in_path_table)
-      end
+      describe 'scenario' do
+        context 'file path exist' do
+          context 'target file 1' do
+            let(:index) { 0 }
+            it_behaves_like(:file_in_path_table)
+          end
+        end
 
-      context 'target file 2' do
-        let(:index) { 1 }
-        it_behaves_like(:file_in_path_table)
+        context 'file path not exist' do
+          context 'target file 2' do
+            let(:index) { 1 }
+            it_behaves_like(:file_in_path_table)
+          end
+        end
       end
     end
 
@@ -143,7 +150,7 @@ module RspecFileChef
       before { create_path_table }
       after { clear_target_dir }
       specify { expect(subject.test_files).to be_an_instance_of(Array) }
-      specify { expect(subject.test_files).to eq(%w[/target_file_1 /target_file_2]) }
+      specify { expect(subject.test_files).to eq(%w[/target_file_1 /target_file_2 /target_file_3]) }
     end
 
     describe '#move_to_tmp_dir' do
@@ -157,12 +164,14 @@ module RspecFileChef
 
       let(:target_file) { 'target_file_1' }
 
-      context 'temp dir' do
-        specify { expect(Dir.entries(tmp_dir)).to include(target_file) }
-      end
+      describe 'scenario' do
+        context 'temp dir' do
+          specify { expect(Dir.entries(tmp_dir)).to include(target_file) }
+        end
 
-      context 'target dir' do
-        specify { expect(Dir.entries(target_dir)).not_to include(target_file) }
+        context 'target dir' do
+          specify { expect(Dir.entries(target_dir)).not_to include(target_file) }
+        end
       end
     end
 
@@ -174,7 +183,33 @@ module RspecFileChef
 
       after { clear_target_dir }
 
-      specify { expect(Dir.entries(target_dir)).to include('virtual_dir') }
+      
+      describe 'scenario' do
+        describe 'real dir' do
+          context 'should not create dir' do
+            before { FileUtils.rm_r("#{target_dir}/real_dir") }
+            specify { expect(Dir.entries(target_dir)).not_to include('real_dir') }
+          end
+        end
+
+        describe 'virtual dir' do
+          context 'should create dir recursively' do
+            let(:virtual_dir) { 'virtual_dir_1' }
+
+            context 'first level' do
+              specify do
+                expect(Dir.entries(target_dir)).to include(virtual_dir)
+              end
+            end
+
+            context 'second level' do
+              specify do
+                expect(Dir.entries("#{target_dir}/#{virtual_dir}")).to include('virtual_dir_2')
+              end
+            end
+          end
+        end
+      end
     end
 
     describe '#same_file_path' do
@@ -183,16 +218,24 @@ module RspecFileChef
 
       let(:tracked_file_path) { subject.path_table['target_file_1'][1] }
 
-      context 'test file with existen name like key in path table' do
-        specify do
-          expect(subject.send(:same_file_path, '/path/target_file_1')).to eq(tracked_file_path)
+      describe 'scenario' do
+        context 'test file with existen name like key in path table' do
+          specify do
+            expect(subject.send(:same_file_path, '/path/target_file_1')).to eq(tracked_file_path)
+          end
+        end
+
+        context 'test file with non existen name like key in path table' do
+          specify do
+            expect(subject.send(:same_file_path, '/path/target_file')).to eq(nil)
+          end
         end
       end
+    end
 
-      context 'test file with non existen name like key in path table' do
-        specify do
-          expect(subject.send(:same_file_path, '/path/target_file')).to eq(nil)
-        end
+    describe '#copy_from_test_dir' do
+      describe 'scenario' do
+        
       end
     end
 
