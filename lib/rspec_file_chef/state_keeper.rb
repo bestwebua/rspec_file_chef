@@ -49,7 +49,7 @@ module RspecFileChef
 
     def create_nonexistent_dirs
       path_table.each do |_, file|
-        file_dir, dir_exists = file[1..-1]
+        file_dir, dir_exists = file[1..2]
         FileUtils.mkdir_p(file_dir) unless dir_exists
       end
     end
@@ -78,12 +78,16 @@ module RspecFileChef
       end
     end
 
+    def candidate_to_erase(file_data)
+      parent_dir, level_depth = file_data[1], file_data[-1]
+      level_depth-=1 unless level_depth.zero?
+      discover_path_depth(parent_dir)[level_depth]
+    end
+
     def delete_nonexistent_dirs
-      path_table.each do |_, file|
-        parent_dir, dir_exists, level_depth = file[1..-1]
-        level_depth-=1 unless level_depth.zero?
-        candidate_to_erase = discover_path_depth(parent_dir)[level_depth]
-        FileUtils.rm_r(candidate_to_erase) unless dir_exists
+      path_table.each do |_, file_data|
+        dir_exists = file_data[2]
+        FileUtils.rm_r(candidate_to_erase(file_data)) unless dir_exists
       end
     end
   end
