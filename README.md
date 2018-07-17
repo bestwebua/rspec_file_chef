@@ -135,7 +135,9 @@ Put into this dir your files if you want gem to use it as test data examples dur
 Returns list of test files absolute paths that existing in your test_dir folder:
 ```ruby
 file_chef_instance.test_files
-# => ['/your_test_dir/somefile1', '/your_test_dir/somefile2', '/your_test_dir/somefile2']
+# => ['/your_test_dir_absolute_path/somefile1',
+      '/your_test_dir_absolute_path/somefile2',
+      '/your_test_dir_absolute_path/somefile3']
 ```
 
 
