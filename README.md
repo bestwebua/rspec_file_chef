@@ -159,7 +159,7 @@ Put into this dir your files if you want gem to use it as test data examples dur
 file_chef_instance.test_files
 ```
 
-Returns list of test files absolute paths that existing in your test_dir folder. It makes sense to use getters below after method ```.make``` was run.
+Returns list of test files absolute paths that existing in your test_dir folder. The returned list is represented as an array, the elements of which are sorted in the order like ```.tracking_files```  **It makes sense to use this method after method ```.make``` was run. Otherwise you will get empty array**.
 
 ```ruby
 # => ['/your_test_dir_absolute_path/somefile1',
@@ -167,7 +167,13 @@ Returns list of test files absolute paths that existing in your test_dir folder.
 # =>  '/your_test_dir_absolute_path/somefile3']
 ```
 
+### #path_table
 
+```ruby
+file_chef_instance.path_table
+```
+
+Returns associative array, where all tracking files are represented as keys. As values returns array with next data-pattern: ```[absolute_file_path, absolute_parent_dir_path, file_exist?, level_depth_of_existing_dir_path]```. **It makes sense to use this method after method ```.make``` was run. Otherwise you will get empty hash**.
 
 ## Contributing
 
