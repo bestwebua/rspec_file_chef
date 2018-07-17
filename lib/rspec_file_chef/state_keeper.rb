@@ -17,7 +17,7 @@ module RspecFileChef
     def discover_path_depth(dir_path)
       raise 'Wrong path!' unless dir_path[/\A\//]
       paths = dir_path[1..-1].split('/').map { |item| "/#{item}" }
-      paths.each_with_index.map { |item, index| paths[0..index].join }.reverse
+      paths.each_index.map { |index| paths[0..index].join }.reverse
     end
 
     def existing_level_depth(dir_path)
