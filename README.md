@@ -61,7 +61,7 @@ Also you can pass more than one argument, for instance:
 ```ruby
 file_chef_instance = RspecFileChef::FileChef.new(file1, file2 file3, file_n)
 ```
-
+---
 ### .make
 This method prepares your rspec environment files under curry sauce. So what's happening when this method run?
 Your personal FileChef:
