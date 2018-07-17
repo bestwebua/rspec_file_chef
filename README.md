@@ -41,11 +41,13 @@ RSpec.describe SomeTestClass do
 
     # Config as below if you want use your custom paths only
     RspecFileChef::FileChef.configure do |config|
-      config.custom_tmp_dir = File.expand_path(__dir__)
-      config.custom_test_dir = File.expand_path(__dir__)
+      config.custom_tmp_dir = 'your_absolute_path_to_existing_tmp_dir'
+      config.custom_test_dir = 'your_absolute_path_to_existing_test_dir'
     end
-
-    @env = RspecFileChef::FileChef.new(file1, file2)
+    
+    # Add files for tracking. It should be real or virtual absolute paths represented as a string.
+    # You can path more than one argument, for instance: RspecFileChef::FileChef.new(file1, file2)
+    @env = RspecFileChef::FileChef.new(file)
     @env.make
   end
 
