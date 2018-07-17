@@ -27,7 +27,33 @@ Or install it yourself as:
 
 ## Usage
 
+```ruby
+# your_project/spec/some_test_class_spec.rb
 
+require 'rspec_file_chef'
+RSpec.describe SomeTestClass do
+  before(:context) do
+
+    # If you don't want use custom paths config your rspec_path only
+    RspecFileChef::FileChef.configure do |config|
+      config.rspec_path = File.expand_path(__dir__)
+    end
+
+    # Config as below if you want use your custom paths only
+    RspecFileChef::FileChef.configure do |config|
+      config.custom_tmp_dir = File.expand_path(__dir__)
+      config.custom_test_dir = File.expand_path(__dir__)
+    end
+
+    @env = RspecFileChef::FileChef.new(file1, file2)
+    @env.make
+  end
+
+  after(:context) do
+    @env.clear
+  end
+end
+```
 
 ## Contributing
 
