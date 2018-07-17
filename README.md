@@ -25,16 +25,15 @@ Or install it yourself as:
 
     $ gem install rspec_file_chef
 
-## Usage
-
-### Public methods
+## Public methods
+### .new
 Create new instance of RspecFileChef::FileChef.
 
 ```ruby
 RspecFileChef::FileChef.new(file)
 ```
 
-Argument ```files``` is your file-list for tracking. It should be real or virtual absolute paths represented as a string. Please note, file-names of tracking files should be unique, for instance:
+Passed argument(s) is your file-list for tracking. It should be real or virtual absolute paths represented as a string. Please note, file-names of tracking files should be unique, for instance:
 
 ```ruby
 file1 = '/path/somefile1'
@@ -42,10 +41,19 @@ file2 = '/path/path/somefile2'
 file2 = '/path/path/path/somefile3'
 ```
 
-Also you can path more than one argument, for instance:
+Also you can pass more than one argument, for instance:
 ```ruby
-RspecFileChef::FileChef.new(file1, file2 file3, file_n)
+file_chef_instance = RspecFileChef::FileChef.new(file1, file2 file3, file_n)
 ```
+
+### .tracking_files
+Getter with list of your tracked files in a default order.
+
+```ruby
+file_chef_instance.tracking_files # => ['/path/somefile1', '/path/path/somefile2', '/path/path/path/somefile3']
+```
+
+
 
 
 ```ruby
