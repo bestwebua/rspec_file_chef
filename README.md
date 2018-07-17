@@ -43,8 +43,7 @@ RspecFileChef::FileChef.configure do |config|
 end
 ```
 
-## Public methods
-
+## Public class methods
 ### .new
 Create new instance of RspecFileChef::FileChef.
 
@@ -62,9 +61,9 @@ Also you can pass more than one argument, for instance:
 ```ruby
 file_chef_instance = RspecFileChef::FileChef.new(file1, file2 file3, file_n)
 ```
----
 
-### .make
+## Public instance methods
+### #make
 This method prepares your rspec environment files under curry sauce. So what happens when this method run?
 Your personal FileChef:
 1. Creates a path_table. It consists all necessary info about your tracked files.
@@ -75,9 +74,8 @@ Your personal FileChef:
 ```ruby
 file_chef_instance.make
 ```
----
 
-### .clear
+### #clear
 This method is washing dishes in your project folder and restores previous state of tracked files. What happens here?
 1. Erases test files.
 2. Restores tracking files.
@@ -86,25 +84,23 @@ This method is washing dishes in your project folder and restores previous state
 ```ruby
 file_chef_instance.clear
 ```
----
 
-### Class getters
-
-#### .tracking_files
+### Instance getters
+#### #tracking_files
 Returns list of your tracked files in a default order:
 ```ruby
 file_chef_instance.tracking_files
 # => ['/path/somefile1', '/path/path/somefile2', '/path/path/path/somefile3']
 ```
 
-#### .rspec_path
+#### #rspec_path
 Returns your project spec absolute path:
 ```ruby
 file_chef_instance.rspec_path
 # => '/your_project/spec'
 ```
 
-#### .tmp_dir
+#### #tmp_dir
 Returns your project tmp_dir absolute path:
 ```ruby
 file_chef_instance.tmp_dir
@@ -115,7 +111,7 @@ file_chef_instance.tmp_dir
 # => '/your_custom_path/your_custom_temp_data_dir'
 ```
 
-#### .test_dir
+#### #test_dir
 Returns your project test_dir absolute path.
 ```ruby
 file_chef_instance.test_dir
@@ -129,53 +125,16 @@ file_chef_instance.test_dir
 Put into this dir your files if you want gem to use it as test data examples during your rspec tests run.
 
 > Please note, file-names of tracking files should be unique, and have the same names as files that ```.tracking_files``` method returns. For instance, to use this case you should put: ```somefile1```, ```somefile2```, ```somefile3``` into your test folder.
+---
 
-#### It makes sense to use getters below after method ```.make``` was run
-#### .test_files
-Returns list of test files absolute paths that existing in your test_dir folder:
+#### #test_files
+Returns list of test files absolute paths that existing in your test_dir folder. It makes sense to use getters below after method ```.make``` was run.
+
 ```ruby
 file_chef_instance.test_files
 # => ['/your_test_dir_absolute_path/somefile1',
-      '/your_test_dir_absolute_path/somefile2',
-      '/your_test_dir_absolute_path/somefile3']
-```
-
-
-```ruby
-# your_project/spec/some_test_class_spec.rb
-
-require 'rspec_file_chef'
-RSpec.describe SomeTestClass do
-  before(:context) do
-
-    # If you don't want use custom paths config your rspec_path only
-    RspecFileChef::FileChef.configure do |config|
-      config.rspec_path = File.expand_path(__dir__)
-    end
-
-    # Config as below if you want use your custom paths only
-    RspecFileChef::FileChef.configure do |config|
-      config.custom_tmp_dir = 'your_absolute_path_to_existing_tmp_dir'
-      config.custom_test_dir = 'your_absolute_path_to_existing_test_dir'
-    end
-    
-    # Add files for tracking. It should be real or virtual absolute paths
-    # represented as a string. You can path more than one argument,
-    # for instance: RspecFileChef::FileChef.new(file1, file2)
-
-    # Please note, file-names of tracking files should be unique, for instance:
-    # file1 = '/path/somefile1'
-    # file2 = '/path/path/somefile2'
-    # file2 = '/path/path/path/somefile3'
-
-    @env = RspecFileChef::FileChef.new(file)
-    @env.make
-  end
-
-  after(:context) do
-    @env.clear
-  end
-end
+# =>  '/your_test_dir_absolute_path/somefile2',
+# =>  '/your_test_dir_absolute_path/somefile3']
 ```
 
 
