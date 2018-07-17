@@ -9,6 +9,12 @@ module RspecFileChef
       specify { expect(subject.send(method)).to be(true) }
     end
 
+    let(:allow_instance_methods) do
+      instance_methods.each do |method|
+        allow(subject).to receive(method).and_return(true)
+      end
+    end
+
     describe '.config accepting' do
       let(:empty_config) do
         subject.class.config.instance_variable_get(:@config).values.all?(&:nil?)
@@ -80,13 +86,14 @@ module RspecFileChef
         %i[create_path_table move_to_tmp_dir create_nonexistent_dirs copy_from_test_dir]
       end
 
-      before do
-        instance_methods.each do |method|
-          allow_any_instance_of(FileChef).to receive(method).and_return(true)
-        end
-      end
+      before { allow_instance_methods; subject.make }
+      after { subject.make }
 
       describe 'method call' do
+        context '#make' do
+          specify { expect(subject).to receive(:make) }
+        end
+
         context '#create_path_table' do
           let(:method) { :create_path_table }
           it_behaves_like(:method_call)
@@ -114,13 +121,14 @@ module RspecFileChef
         %i[delete_test_files restore_tracking_files delete_nonexistent_dirs]
       end
 
-      before do
-        instance_methods.each do |method|
-          allow_any_instance_of(subject.class).to receive(method).and_return(true)
-        end
-      end
+      before { allow_instance_methods; subject.clear }
+      after { subject.clear }
 
       describe 'method call' do
+        context '#clear' do
+          specify { expect(subject).to receive(:clear) }
+        end
+
         context '#delete_test_files' do
           let(:method) { :delete_test_files }
           it_behaves_like(:method_call)
