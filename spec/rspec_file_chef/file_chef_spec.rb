@@ -1,6 +1,7 @@
 module RspecFileChef
   RSpec.describe FileChef do
     before do
+      allow_any_instance_of(FileChef).to receive(:check_tracking_files).and_return(true)
       allow_any_instance_of(FileChef).to receive(:set_rspec_path).and_return(true)
       allow_any_instance_of(FileChef).to receive(:set_dir_paths).and_return(true)
     end
@@ -59,6 +60,21 @@ module RspecFileChef
 
     describe '#initialize' do
       describe 'method call' do
+        describe 'sets instance var' do
+          context '@tracking_files' do
+            specify { expect(subject.instance_variable_get(:@tracking_files)).to be_an_instance_of(Array) }
+          end
+
+          context '@path_table' do
+            specify { expect(subject.instance_variable_get(:@path_table)).to be_an_instance_of(Hash) }
+          end
+        end
+
+        context '#check_tracking_files' do
+          let(:method) { :check_tracking_files }
+          it_behaves_like(:method_call)
+        end
+
         context '#set_rspec_path' do
           let(:method) { :set_rspec_path }
           it_behaves_like(:method_call)
@@ -67,16 +83,6 @@ module RspecFileChef
         context '#set_dir_paths' do
           let(:method) { :set_dir_paths }
           it_behaves_like(:method_call)
-        end
-      end
-
-      describe 'sets instance var' do
-        context '@tracking_files' do
-          specify { expect(subject.instance_variable_get(:@tracking_files)).to be_an_instance_of(Array) }
-        end
-
-        context '@path_table' do
-          specify { expect(subject.instance_variable_get(:@path_table)).to be_an_instance_of(Hash) }
         end
       end
     end
