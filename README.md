@@ -65,7 +65,12 @@ file_chef_instance = RspecFileChef::FileChef.new(file1, file2 file3, file_n)
 ```
 
 ### .make
-This method prepares your rspec environment files under curry sauce.
+This method prepares your rspec environment files under curry sauce. So what's happening when this method run?
+Your personal FileChef:
+1. Creates a path_table. It consist all necessary info about your tracked files.
+2. Moves your not virtual tracked files to temp dir.
+3. Creates non existent dirs if you have used virtual files.
+4. Copies your test examples from test dir to current environment.
 
 ```ruby
 file_chef_instance.make
@@ -111,7 +116,7 @@ file_chef_instance.test_dir
 
 Put into this dir your files if you want that gem will use it as test data examples during your rspec tests run.
 
-Please note, file-names of tracking files should be unique, and has the same names as files in ```file_chef_instance.tracking_files```. For instance, for use this case you should put: somefile1, somefile2, somefile3 into your test folder.
+Please note, file-names of tracking files should be unique, and has the same names as files that ```.tracking_files``` method returns. For instance, for use this case you should put: ```somefile1```, ```somefile2```, ```somefile3``` into your test folder.
 
 
 
