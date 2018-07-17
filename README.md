@@ -1,4 +1,6 @@
 # RSpec File Chef
+<a href="https://codeclimate.com/github/bestwebua/rspec_file_chef/maintainability"><img src="https://api.codeclimate.com/v1/badges/4d21c733276304e2e8e1/maintainability" /></a> <a href="https://codeclimate.com/github/bestwebua/rspec_file_chef/test_coverage"><img src="https://api.codeclimate.com/v1/badges/4d21c733276304e2e8e1/test_coverage" /></a> [![Gem Version](https://badge.fury.io/rb/rspec_file_chef.svg)](https://badge.fury.io/rb/rspec_file_chef)
+
 The main idea of this gem is saving previous state of tracking files after running RSpec. It should be helpful when your project is using it's own local files to record some data or a log. And you don't want RSpec to change it. Or you don't want to get a lot of temporary test files in your project root folder after your tests were complete.
 
 ## Features
@@ -51,7 +53,7 @@ end
 RspecFileChef::FileChef.new(file)
 ```
 
-Create new instance of RspecFileChef::FileChef. Passed argument is your file-list for your tracking files. It should be real or virtual absolute paths represented as a string. Please note, file-names of tracking files should be unique, for instance:
+Create new instance of RspecFileChef::FileChef. Passed argument is your file-list for your tracking files. It should be real or virtual absolute paths represented as a string. **Please note, file-names of tracking files should be unique, otherwise you get RuntimeError**. For instance:
 
 ```ruby
 file1, file2, file3 = '/path/somefile1', '/path/path/somefile2', '/path/path/path/somefile3'
@@ -173,7 +175,74 @@ Returns list of test files absolute paths that existing in your test_dir folder.
 file_chef_instance.path_table
 ```
 
-Returns associative array, where all tracking files are represented as keys. As values returns array with next data-pattern: ```[absolute_file_path, absolute_parent_dir_path, file_exist?, level_depth_of_existing_dir_path]```. **It makes sense to use this method after method ```.make``` was run. Otherwise you will get empty hash**.
+Returns associative array, where all tracking file-names are represented as keys. As values returns array with next data-pattern: ```[absolute_file_path, absolute_parent_dir_path, file_exist?, level_depth_of_existing_dir_path]```. **It makes sense to use this method after method ```.make``` was run. Otherwise you will get empty hash**.
+
+```ruby
+# => {'somefile1' => [absolute_file_path, absolute_parent_dir_path, file_exist?, level_depth_of_existing_dir_path]}
+```
+
+## Examples of using
+What are real and virtual files? Real file is an existing file which state you want to keep during running tests. Virtual file is a file the state of which you want to control. For example, you know which file your app logged. Before your tests run your log-file not existen. You need to check is your app write the log during your tests. But you don't wont to see this log after your tests. This is case for using virtual files.
+
+**1. Using default gem paths**
+
+```ruby
+# your_project/spec/some_test_class_spec.rb
+require 'rspec_file_chef'
+
+RSpec.describe SomeTestClass do
+  before(:context) do
+    RspecFileChef::FileChef.configure do |config|
+      config.rspec_path = File.expand_path(__dir__)
+    end
+
+    file = '/path/somefile1'
+
+    @env = RspecFileChef::FileChef.new(file)
+    @env.make
+  end
+
+  after(:context) do
+    @env.clear
+  end
+end
+```
+
+**2. Using your custom paths**
+
+```ruby
+# your_project/spec/some_test_class_spec.rb
+require 'rspec_file_chef'
+
+RSpec.describe SomeTestClass do
+  before(:context) do
+    RspecFileChef::FileChef.configure do |config|
+      config.custom_tmp_dir = 'your_absolute_path_to_existing_tmp_dir'
+      config.custom_test_dir = 'your_absolute_path_to_existing_test_dir'
+    end
+
+    file1, file2, file3 = '/path/somefile1', /path/path/somefile2', '/path/path/path/somefile3'
+
+    @env = RspecFileChef::FileChef.new(file1, file2, file3)
+    @env.make
+  end
+
+  after(:context) do
+    @env.clear
+  end
+end
+```
+
+**3. Common configuration for all tests**
+
+```ruby
+# your_project/spec/spec_helper.rb
+require 'rspec_file_chef'
+
+RspecFileChef::FileChef.configure do |config|
+  config.rspec_path = File.expand_path(__dir__)
+end
+```
 
 ## Contributing
 
