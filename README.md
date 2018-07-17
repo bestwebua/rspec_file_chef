@@ -27,6 +27,27 @@ Or install it yourself as:
 
 ## Usage
 
+### Public methods
+Create new instance of RspecFileChef::FileChef.
+
+```ruby
+RspecFileChef::FileChef.new(file)
+```
+
+Argument ```files``` is your file-list for tracking. It should be real or virtual absolute paths represented as a string. Please note, file-names of tracking files should be unique, for instance:
+
+```ruby
+file1 = '/path/somefile1'
+file2 = '/path/path/somefile2'
+file2 = '/path/path/path/somefile3'
+```
+
+Also you can path more than one argument, for instance:
+```ruby
+RspecFileChef::FileChef.new(file1, file2 file3, file_n)
+```
+
+
 ```ruby
 # your_project/spec/some_test_class_spec.rb
 
@@ -45,8 +66,15 @@ RSpec.describe SomeTestClass do
       config.custom_test_dir = 'your_absolute_path_to_existing_test_dir'
     end
     
-    # Add files for tracking. It should be real or virtual absolute paths represented as a string.
-    # You can path more than one argument, for instance: RspecFileChef::FileChef.new(file1, file2)
+    # Add files for tracking. It should be real or virtual absolute paths
+    # represented as a string. You can path more than one argument,
+    # for instance: RspecFileChef::FileChef.new(file1, file2)
+
+    # Please note, file-names of tracking files should be unique, for instance:
+    # file1 = '/path/somefile1'
+    # file2 = '/path/path/somefile2'
+    # file2 = '/path/path/path/somefile3'
+
     @env = RspecFileChef::FileChef.new(file)
     @env.make
   end
