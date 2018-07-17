@@ -14,6 +14,14 @@ module RspecFileChef
       %r{\A(.+)\/([^\/]+)\z}
     end
 
+    def tracking_files_not_uniq?
+      tracking_files != tracking_files&.uniq
+    end
+
+    def check_tracking_files
+      raise 'Tracking files not unique!' if tracking_files_not_uniq?
+    end
+
     def discover_path_depth(dir_path)
       raise 'Wrong path!' unless dir_path[/\A\//]
       paths = dir_path[1..-1].split('/').map { |item| "/#{item}" }
