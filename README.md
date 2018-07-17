@@ -61,7 +61,7 @@ Also you can pass more than one argument, for instance:
 ```ruby
 file_chef_instance = RspecFileChef::FileChef.new(file1, file2 file3, file_n)
 ```
----
+
 ### .make
 This method prepares your rspec environment files under curry sauce. So what's happening when this method run?
 Your personal FileChef:
@@ -114,7 +114,7 @@ file_chef_instance.test_dir
 
 Put into this dir your files if you want that gem will use it as test data examples during your rspec tests run.
 
-Please note, file-names of tracking files should be unique, and has the same names as files that ```.tracking_files``` method returns. For instance, for use this case you should put: ```somefile1```, ```somefile2```, ```somefile3``` into your test folder.
+> Please note, file-names of tracking files should be unique, and has the same names as files that ```.tracking_files``` method returns. For instance, for use this case you should put: ```somefile1```, ```somefile2```, ```somefile3``` into your test folder.
 
 
 
