@@ -50,7 +50,8 @@ file_chef_instance = RspecFileChef::FileChef.new(file1, file2 file3, file_n)
 Getter with list of your tracked files in a default order.
 
 ```ruby
-file_chef_instance.tracking_files # => ['/path/somefile1', '/path/path/somefile2', '/path/path/path/somefile3']
+file_chef_instance.tracking_files
+# => ['/path/somefile1', '/path/path/somefile2', '/path/path/path/somefile3']
 ```
 
 
