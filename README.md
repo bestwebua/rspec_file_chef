@@ -61,7 +61,7 @@ Also you can pass more than one argument, for instance:
 ```ruby
 file_chef_instance = RspecFileChef::FileChef.new(file1, file2 file3, file_n)
 ```
-
+---
 ### .make
 This method prepares your rspec environment files under curry sauce. So what's happening when this method run?
 Your personal FileChef:
@@ -73,7 +73,16 @@ Your personal FileChef:
 ```ruby
 file_chef_instance.make
 ```
-
+---
+### .clear
+This method is washing dishes in your project folder and restores previous state of tracked files. What happening here?
+1. Erases test files.
+2. Restores tracking files.
+3. Deletes non existent dirs if they were created for virtual files.
+```ruby
+file_chef_instance.clear
+```
+---
 ### Class getters
 #### .tracking_files
 Getter with list of your tracked files in a default order:
