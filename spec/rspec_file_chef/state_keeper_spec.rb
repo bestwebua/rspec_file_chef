@@ -137,7 +137,7 @@ module RspecFileChef
       specify do
         expect{subject.send(:discover_path_depth, 'path_without_slash')}.to raise_error(RuntimeError, 'Wrong path!')
       end
-      
+
       specify { expect(subject.send(:discover_path_depth, '/path')).to be_an_instance_of(Array) }
       
       describe 'scenario' do
@@ -201,7 +201,10 @@ module RspecFileChef
     end
 
     describe '#test_files' do
-      before { create_path_table }
+      before do
+        create_path_table
+        allow(subject).to receive(:test_dir)
+      end
       after { clear_target_dir }
       specify { expect(subject.test_files).to be_an_instance_of(Array) }
       specify { expect(subject.test_files).to eq(%w[/target_file_1 /target_file_2 /target_file_3]) }
