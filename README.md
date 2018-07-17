@@ -99,7 +99,9 @@ file_chef_instance.tracking_files
 
 Returns list of your tracked files in a default order:
 
-```['/path/somefile1', '/path/path/somefile2', '/path/path/path/somefile3']```
+```ruby
+# => ['/path/somefile1', '/path/path/somefile2', '/path/path/path/somefile3']
+```
 
 
 ### #rspec_path
@@ -109,8 +111,9 @@ file_chef_instance.rspec_path
 ```
 
 Returns your project spec absolute path:
-
-```'/absolute_path_to_your_project/spec'```
+```ruby
+# => '/absolute_path_to_your_project/spec'
+```
 
 
 ### #tmp_dir
@@ -120,12 +123,14 @@ file_chef_instance.tmp_dir
 ```
 
 Returns your project tmp_dir absolute path. When default paths config using:
-
-```'/absolute_path_to_your_project/spec/support/helpers/file_chef/temp_data'```
+```ruby
+# => '/absolute_path_to_your_project/spec/support/helpers/file_chef/temp_data'
+```
 
 When custom paths config using:
-
-```'/your_absolute_custom_path/your_custom_temp_data_dir'```
+```ruby
+# => '/your_absolute_custom_path/your_custom_temp_data_dir'
+```
 
 
 ### #test_dir
@@ -135,12 +140,14 @@ file_chef_instance.test_dir
 ```
 
 Returns your project test_dir absolute path. When default paths config using:
-
-```'/absolute_path_to_your_project/spec/support/helpers/file_chef/test_data'```
+```ruby
+# => '/absolute_path_to_your_project/spec/support/helpers/file_chef/test_data'
+```
 
 When custom paths config using:
-
-```'/your_absolute_custom_path/your_custom_test_data_dir'```
+```ruby
+# => '/your_absolute_custom_path/your_custom_test_data_dir'
+```
 
 Put into this dir your files if you want gem to use it as test data examples during your rspec tests run.
 
@@ -154,10 +161,10 @@ file_chef_instance.test_files
 
 Returns list of test files absolute paths that existing in your test_dir folder. It makes sense to use getters below after method ```.make``` was run.
 
-```
-['/your_test_dir_absolute_path/somefile1',
- '/your_test_dir_absolute_path/somefile2',
- '/your_test_dir_absolute_path/somefile3']
+```ruby
+# => ['/your_test_dir_absolute_path/somefile1',
+# =>  '/your_test_dir_absolute_path/somefile2',
+# =>  '/your_test_dir_absolute_path/somefile3']
 ```
 
 
