@@ -385,6 +385,27 @@ module RspecFileChef
       end
     end
 
+    describe '#candidate_to_erase' do
+      before { create_path_table }
+      after { clear_target_dir }
+
+      describe 'scenario' do
+        context 'depth level not equal zero' do
+          let(:not_zero_level) { subject.path_table['target_file_3'] }
+          specify do
+            expect(subject.send(:candidate_to_erase, not_zero_level)).to eq("#{target_dir}/virtual_dir_1")
+          end
+        end
+
+        context 'depth level equal zero' do
+          let(:zero_level) { subject.path_table['target_file_1'] }
+          specify do
+            expect(subject.send(:candidate_to_erase, zero_level)).to eq(target_dir)
+          end
+        end
+      end
+    end
+
     describe '#delete_nonexistent_dirs' do
       before do
         create_path_table
