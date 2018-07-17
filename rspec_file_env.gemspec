@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['admin@bestweb.com.ua']
 
   spec.summary       = %q{RspecFileChef}
-  spec.description   = %q{RSpec File Environment control. Keeper of previous state of tracking files and temporary test files cleaner.}
+  spec.description   = %q{RSpec File Environment control. Keeper of current state of tracked files and temporary files cleaner.}
   spec.homepage      = 'https://github.com/bestwebua/rspec_file_chef'
   spec.license       = 'MIT'
 
