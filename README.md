@@ -54,9 +54,7 @@ RspecFileChef::FileChef.new(file)
 Passed argument(s) is your file-list for tracking. It should be real or virtual absolute paths represented as a string. Please note, file-names of tracking files should be unique, for instance:
 
 ```ruby
-file1 = '/path/somefile1'
-file2 = '/path/path/somefile2'
-file2 = '/path/path/path/somefile3'
+file1, file2, file3 = '/path/somefile1', '/path/path/somefile2', '/path/path/path/somefile3'
 ```
 
 Also you can pass more than one argument, for instance:
