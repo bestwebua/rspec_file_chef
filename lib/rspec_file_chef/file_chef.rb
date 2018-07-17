@@ -9,10 +9,11 @@ module RspecFileChef
     setting :custom_test_dir
 
     def initialize(*tracking_files)
-      set_rspec_path
-      set_dir_paths
       @tracking_files = tracking_files
       @path_table = {}
+      check_tracking_files
+      set_rspec_path
+      set_dir_paths
     end
 
     def make
