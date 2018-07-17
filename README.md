@@ -25,6 +25,24 @@ Or install it yourself as:
 
     $ gem install rspec_file_chef
 
+## Class configuration
+Before creating class instance you should to config your FileChef class, otherwise you get RuntimeError.
+
+If you don't want use custom paths config your rspec_path only:
+```ruby
+RspecFileChef::FileChef.configure do |config|
+  config.rspec_path = 'your_absolute_path_to_project_rspec_dir'
+end
+```
+
+Config as below if you want use your custom paths only:
+```ruby
+RspecFileChef::FileChef.configure do |config|
+  config.custom_tmp_dir = 'your_absolute_path_to_existing_tmp_dir'
+  config.custom_test_dir = 'your_absolute_path_to_existing_test_dir'
+end
+```
+
 ## Public methods
 ### .new
 Create new instance of RspecFileChef::FileChef.
@@ -46,13 +64,58 @@ Also you can pass more than one argument, for instance:
 file_chef_instance = RspecFileChef::FileChef.new(file1, file2 file3, file_n)
 ```
 
-### .tracking_files
-Getter with list of your tracked files in a default order.
+### .make
+This method prepares your rspec environment files under curry sauce.
+
+```ruby
+file_chef_instance.make
+```
+
+### Class getters
+#### .tracking_files
+Getter with list of your tracked files in a default order:
 
 ```ruby
 file_chef_instance.tracking_files
 # => ['/path/somefile1', '/path/path/somefile2', '/path/path/path/somefile3']
 ```
+
+#### .rspec_path
+Getter with your project spec absolute path:
+```ruby
+file_chef_instance.rspec_path
+# => '/your_project/spec'
+```
+
+#### .tmp_dir
+Getter with your project tmp_dir absolute path:
+```ruby
+file_chef_instance.tmp_dir
+# default paths config using
+# => '/your_project/spec/support/helpers/file_chef/temp_data'
+
+# custom paths config using
+# => '/your_custom_path/your_custom_temp_data_dir'
+```
+
+#### .test_dir
+Getter with your project test_dir absolute path.
+```ruby
+file_chef_instance.test_dir
+# default paths config using
+# => '/your_project/spec/support/helpers/file_chef/test_data'
+
+# custom paths config using
+# => '/your_custom_path/your_custom_test_data_dir'
+```
+
+Put into this dir your files if you want that gem will use it as test data examples during your rspec tests run.
+
+Please note, file-names of tracking files should be unique, and has the same names as files in ```file_chef_instance.tracking_files```. For instance, for use this case you should put: somefile1, somefile2, somefile3 into your test folder.
+
+
+
+
 
 
 
