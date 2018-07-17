@@ -131,6 +131,23 @@ module RspecFileChef
       end
     end
 
+    describe '#tracking_files_not_uniq?' do
+      describe 'files not unique' do
+        before { allow(subject).to receive(:tracking_files).and_return([1,2,1]) }
+        specify { expect(subject.send(:tracking_files_not_uniq?)).to be(true) }
+      end
+
+      describe 'files unique' do
+        before { allow(subject).to receive(:tracking_files).and_return([1,2,3]) }
+        specify { expect(subject.send(:tracking_files_not_uniq?)).to be(false) }
+      end
+    end
+
+    describe '#check_tracking_files' do
+      before { allow(subject).to receive(:tracking_files_not_uniq?).and_return(true) }
+      specify { expect{subject.send(:check_tracking_files)}.to raise_error(RuntimeError, 'Tracking files not unique!') }
+    end
+
     describe '#discover_path_depth' do
       specify { expect{subject.send(:discover_path_depth)}.to raise_error(ArgumentError) }
 
