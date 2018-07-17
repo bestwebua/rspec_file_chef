@@ -3,10 +3,31 @@ The main idea of this gem is saving previous state of tracking files after runni
 
 ## Features
 
-1. Tracking of necessary files
-2. Saving current tracking files if they exists
-3. Copying the same test files if they exists
-4. Restoring the previous state of your project folder
+- Tracking of necessary files
+  - Supporting of virtual files
+  - Saving/restoring current state of tracking files
+- Supporting of tracking files test examples
+- Ability to use custom location for test examples and temp directory
+
+## Installation
+
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'rspec_file_chef'
+```
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install rspec_file_chef
+
+## Usage
+
+
 
 ## Contributing
 
