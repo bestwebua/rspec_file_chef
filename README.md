@@ -183,7 +183,7 @@ Returns associative array, where all tracking file-names are represented as keys
 
 ## Examples of using
 
-###Real and virtual files, what does it mean?
+### Real and virtual files, what does it mean?
 
 Real file is an existing file which state you want to keep during running tests. Virtual file is a file the state of which you want to control, but this file not exist until you run tests.
 
@@ -195,7 +195,7 @@ For example, you know which file your app logged. Before your tests run your log
 
 Your project has use some local data files. You need that this file/files has contain a certain data before you run tests. Just pass the absolute path for this file/files as argument: ```RspecFileChef::FileChef.new(your_file)``` and put file/files with same name(s) into your test_dir. Your file can be either real or virtual. FileChef saves the file state if file is real, and uses example from test_dir during your test run. Otherwise FileChef just uses file from test_dir when your tests running.
 
-###FileChef config examples
+### FileChef config examples
 
 **1. Using default gem paths**
 
