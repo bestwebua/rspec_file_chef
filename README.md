@@ -234,7 +234,7 @@ RSpec.describe SomeTestClass do
       config.custom_test_dir = 'your_absolute_path_to_existing_test_dir'
     end
 
-    file1, file2, file3 = '/path/somefile1', /path/path/somefile2', '/path/path/path/somefile3'
+    file1, file2, file3 = '/path/somefile1', '/path/path/somefile2', '/path/path/path/somefile3'
 
     @env = RspecFileChef::FileChef.new(file1, file2, file3)
     @env.make
